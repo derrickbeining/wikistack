@@ -1,6 +1,7 @@
 'use strict';
 const express = require('express');
 const nunjucks = require('nunjucks');
+const routeRequests = require('./routes')
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path'); // provides utilities for working
@@ -30,15 +31,14 @@ app.use('/', // root is default if not specified; included here for clarity
                                           // body data (user input) is easily
                                          //accessibly via simple dot notation.
   bodyParser.json(), // for AJAX requests
-  express.static(path.join(__dirname, '/public'))
+  express.static(path.join(__dirname, '/public')),
+  routeRequests() // from routes/index.js; runs after all primary middleware
 );
 
+////////////////////////////////////////////////////////
 
-// start the server
+// START SERVER
 const server = app.listen(1337, function(){
   console.log('listening on port 1337');
 });
-var io = socketio.listen(server);
-
-// modular routing that uses io inside it
-app.use('/', makesRouter(io));
+// var io = socketio.listen(server);
