@@ -4,25 +4,70 @@
   <h3>Add a Page</h3>
   <hr>
   <form method="POST" action="/wiki/">
-    
-    <div>PLACEHOLDER FOR AUTHOR NAME FIELD</div>
-    
-    <div>PLACEHOLDER FOR AUTHOR EMAIL FIELD</div>
-    
+
+    <!--AUTHOR NAME INPUT  -->
     <div class="form-group">
-      <label for="title" class="col-sm-2 control-label">Page Title</label>
-      <div class="col-sm-10">
-        <input name="title" type="text" class="form-control"/>
+      <label for="author-name" class=" control-label">
+        Author
+      </label>
+      <div class="">
+        <input name="name" id="author-name" type="text" class="form-control"/>
       </div>
     </div>
-    
-    <div>PLACEHOLDER FOR PAGE CONTENT TEXTAREA FIELD</div>
-    
-    <div>PLACEHOLDER FOR PAGE STATUS INPUT FIELD</div>
 
-    <div class="col-sm-offset-2 col-sm-10">
+    <!-- AUTHOR EMAIL INPUT -->
+    <div class="form-group">
+      <div>
+        <label for="author-email" class=" control-label">
+          Email
+        </label>
+      </div>
+      <div class="">
+        <input id="author-email" name="email" type="text" class="form-control"/>
+      </div>
+    </div>
+
+    <!-- PAGE TITLE INPUT -->
+    <div class="form-group">
+      <div>
+        <label for="title" class=" control-label">
+          Title
+        </label>
+      </div>
+      <div class="">
+        <input name="title" type="text" class="form-control" required/>
+      </div>
+    </div>
+
+    <!-- PAGE CONTENT TEXT AREA INPUT -->
+    <div class="form-group">
+      <div>
+        <label for="article-content" class=" control-label">
+        Article Content
+        </label>
+      </div>
+
+      <div class="">
+        <textarea id="article-content" name="content" class="form-control" rows="15"></textarea>
+      </div>
+    </div>
+
+    <!-- PAGE STATUS INPUT -->
+    <div class="form-group">
+      <label for="article-status" class=" control-label">
+        Article Status
+      </label>
+      <div class="">
+        <input id="closed-status" name="status" type="radio" value="closed" class=""/>
+        <label for="closed-status">Closed</label>
+        <input id="open-status" name="status" type="radio" value="open" class="" checked/>
+        <label for="open-status">Open</label>
+      </div>
+    </div>
+
+    <div class="">
       <button type="submit" class="btn btn-primary">submit</button>
     </div>
-  
+
   </form>
 {% endblock %}
