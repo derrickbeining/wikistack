@@ -1,6 +1,7 @@
 const pg = require('pg');
-const postgresUrl = 'postgres://localhost/twitterdb';
-const client = new pg.Client(postgresUrl);
+const client = new pg.Client('postgres://localhost/twitterdb', {
+  // logging: false
+});
 
 client.connect();
 module.exports = client;
