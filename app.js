@@ -2,8 +2,9 @@
 // APP COMPONENTS
 const express = require('express');
 const nunjucks = require('nunjucks');
-const dbModels = require('./models');
+const models = require('./models');
 const app = express();
+const Faker = require('faker');
 
 // MIDDLEWARE COMPONENTS
 const routeRequests = require('./routes')
@@ -30,21 +31,38 @@ nunjucks.configure('views', { noCache: true }); // specify the views dir for nun
 
 app.use('/', // root is default if not specified; included here for clarity
   morgan('dev'), // <= log http request stats to stdout
+  express.static(path.join(__dirname, '/public')),
   bodyParser.urlencoded({ extended: true }), // for POST/PUT; parse the request
                                            // object and process it so that its
                                           // body data (user input) is easily
                                          //accessibly via simple dot notation.
   bodyParser.json(), // same but for for AJAX requests
-  express.static(path.join(__dirname, '/public')),
   routeRequests() // send http request to routes/index.js for routing
 );
 
 ////////////////////////////////////////////////////////
 
 // SYNC DB THEN START SERVER
-dbModels.db.sync({force: true})
-  .then(_ => {
-    app.listen(1337, function () {
-      console.log('listening on port 1337');
-    });
+models.db.sync({force: true})
+  .then(() => {
+    Promise.all(generateRandomArticles(20))
+      .then(() => {
+        app.listen(1337, function () {
+          console.log('listening on port 1337');
+        });
+      })
+      .catch(console.error.bind(console));
 });
+
+function generateRandomArticles(n) {
+  const articles = [];
+  for (let i = 0; i < n; i++) {
+    let page = models.Page.build({
+      title: Faker.random.words(),
+      content: Faker.lorem.paragraphs(),
+      status: 'closed'
+    })
+    articles.push(page.save())
+  }
+  return articles;
+}

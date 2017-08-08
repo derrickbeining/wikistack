@@ -12,11 +12,8 @@ var Page = db.define('page', {
   },
   urlTitle: {
     type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      notEmpty: true
-    }
+    allowNull: true,
+    unique: true
   },
   content: {
     type: Sequelize.TEXT,
@@ -34,6 +31,11 @@ var Page = db.define('page', {
   }
 },
   {
+    getterMethods: {
+      route() {
+        return '/wiki/' + this.urlTitle
+      }
+    },
     hooks: {
       beforeValidate: (page, option) => {
         page.urlTitle = generateUrlTitle(page.title);
@@ -46,8 +48,6 @@ var User = db.define('user', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: true,
-      isAlpha: true,
       isFirstAndLastName: function (value) {
         const numOfNames = value.split(' ').length;
         if (numOfNames < 2) {
@@ -60,21 +60,13 @@ var User = db.define('user', {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      isEmail: true,
-      notEmpty: true
+      isEmail: true
     }
   }
-},
+});
 
-{
-  getterMethods: {
-    route() {
-      return '/wiki/' + this.urlTitle
-    }
-  }
-}
-
-);
+Page.belongsTo(User, { as: 'author' });
+db.sync();
 
 
 function generateUrlTitle (title) {

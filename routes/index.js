@@ -1,17 +1,24 @@
 'use-strict';
 const express = require('express');
 const router = express.Router();
-// const client = require('../db');
 const wikiRouter = require('./wiki');
-const userRouter = require('./user')
+const userRouter = require('./user');
+const models = require('../models');
+const Page = models.Page;
+const User = models.User;
 
 
 module.exports = function makeRouter() {
   router.use('/wiki', wikiRouter());
   router.use('/user', userRouter());
   router.get('/', function (req, res, next) {
-    res.render('index');
+    Page.findAll({})
+      .then(pages => {
+        res.render('index', { pages: pages });
+      })
+      .catch(next);
   });
 
   return router
 }
+
