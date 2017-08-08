@@ -57,12 +57,17 @@ models.db.sync({force: true})
 function generateRandomArticles(n) {
   const articles = [];
   for (let i = 0; i < n; i++) {
-    let page = models.Page.build({
-      title: Faker.random.words(),
-      content: Faker.lorem.paragraphs(),
-      status: 'closed'
-    })
-    articles.push(page.save())
+    let fakeReqBody = {
+      body: {
+        name: Faker.name.firstName() + " " + Faker.name.lastName(),
+        email: Faker.internet.email(),
+        title: Faker.random.words(),
+        content: Faker.lorem.paragraphs(),
+        status: 'closed'
+      }
+    }
+    articles.push(models.promiseNewPageWithAuthorId(fakeReqBody));
   }
   return articles;
 }
+

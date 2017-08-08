@@ -80,8 +80,26 @@ function generateUrlTitle (title) {
   }
 }
 
+function promiseNewPageWithAuthorId(req) {
+  return User.findOrCreate({
+    where: { email: req.body.email },
+    defaults: { name: req.body.name }
+    })  // .findOrCreate returns a Promised array [result, hadToCreate]
+    .spread((user /*,created */) => { // .spread destructures array to args
+      const page = Page.build({
+        title: req.body.title,
+        content: req.body.content,
+        status: req.body.status
+      });
+      return page.save().then(page => {
+        return page.setAuthor(user);
+      });
+    });
+}
+
 module.exports = {
   Page: Page,
   User: User,
-  db: db
+  db: db,
+  promiseNewPageWithAuthorId: promiseNewPageWithAuthorId
 };

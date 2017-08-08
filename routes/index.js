@@ -7,10 +7,8 @@ const models = require('../models');
 const Page = models.Page;
 const User = models.User;
 
-
-module.exports = function makeRouter() {
   router.use('/wiki', wikiRouter());
-  router.use('/user', userRouter());
+  router.use('/users', userRouter());
   router.get('/', function (req, res, next) {
     Page.findAll({})
       .then(pages => {
@@ -19,6 +17,5 @@ module.exports = function makeRouter() {
       .catch(next);
   });
 
-  return router
-}
+  module.exports = () => router;
 
